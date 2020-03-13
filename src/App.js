@@ -1,24 +1,22 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import Artists from "./components/Artists/Artitst";
+import {Route, Switch} from "react-router";
+import NavBar from "./components/NavBar/NavBar";
+import Container from "reactstrap/lib/Container";
+import Artist from "./components/Artist/Artist";
+import Album from "./components/Album/Album";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+        <NavBar/>
+        <Container>
+            <Switch>
+                <Route path="/" exact component={Artists}/>
+                <Route path="/artist/:id" exact component={Artist}/>
+                <Route path="/album/:id" exact component={Album}/>
+            </Switch>
+        </Container>
     </div>
   );
 }
