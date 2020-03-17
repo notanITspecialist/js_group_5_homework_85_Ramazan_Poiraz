@@ -2,8 +2,13 @@ import React from 'react';
 import { Navbar, NavItem, NavLink, Nav} from 'reactstrap';
 import {NavLink as ToLink} from 'react-router-dom';
 import Container from "reactstrap/lib/Container";
+import UserBar from "./UserBar";
+import AnonimusBar from "./AnonimusBar";
+import {useSelector} from "react-redux";
 
 const NavBar = () => {
+    const user = useSelector(state => state.login.user);
+
     return (
         <div>
             <Navbar color="light" light expand="md">
@@ -12,6 +17,11 @@ const NavBar = () => {
                         <NavItem>
                             <NavLink tag={ToLink} to='/' >Artists</NavLink>
                         </NavItem>
+                        {user.token ? (
+                            <UserBar/>
+                        ) : (
+                            <AnonimusBar/>
+                        )}
                     </Nav>
                 </Container>
             </Navbar>

@@ -9,9 +9,11 @@ import {Provider} from "react-redux";
 import {applyMiddleware, combineReducers, createStore} from "redux";
 import thunk from "redux-thunk";
 import artistsReducer from "./reducers/artists";
+import login from "./reducers/login";
 
 const rootReducer = combineReducers({
     artists: artistsReducer,
+    login: login,
 });
 
 const store = createStore(rootReducer, applyMiddleware(thunk));

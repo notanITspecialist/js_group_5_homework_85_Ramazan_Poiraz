@@ -1,6 +1,6 @@
 import {GET_ARTISTS_SUCCESS} from "../actions/artists";
 import {GET_ARTIST_SUCCESS} from "../actions/artist";
-import {GET_ALBUM_SUCCESS} from "../actions/Album";
+import {GET_ALBUM_SUCCESS} from "../actions/album";
 
 const initState = {
     artists: [],
@@ -27,7 +27,9 @@ const artistsReducer = (state = initState, action) => {
     }
 
     if(action.type === GET_ALBUM_SUCCESS){
-        if(action.data[0]) return {...state, album: {info: action.data[0].album ,tracks: action.data}};
+        const tracks = action.data.sort((a, b) => a.increment - b.increment);
+
+        if(action.data[0]) return {...state, album: {info: action.data[0].album ,tracks: tracks}};
         return {...state, album: {info: {} ,tracks: []}}
     }
     return state;
