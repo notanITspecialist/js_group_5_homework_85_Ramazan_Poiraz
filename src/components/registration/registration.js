@@ -25,7 +25,7 @@ const Registration = props => {
             <FormGroup row>
                 <Label sm={2} for="username">Username</Label>
                 <Col sm={10}>
-                    <Input valid={user.errorReg === true} invalid={user.errorReg !== false} type="text" name="username" id="username" placeholder="Username" value={loginForm.username} onChange={changeLoginForm} />
+                    <Input invalid={!user.errorReg === false} type="text" name="username" id="username" placeholder="Username" value={loginForm.username} onChange={changeLoginForm} />
                     <FormFeedback invalid={`true`}>Such username already exists</FormFeedback>
                 </Col>
             </FormGroup>

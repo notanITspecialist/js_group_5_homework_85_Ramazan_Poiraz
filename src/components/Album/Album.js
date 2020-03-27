@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {addTrackHistory, getAlbum} from "../../actions/album";
+import {addTrackHistory, deleteTrack, getAlbum, publishTrack} from "../../actions/album";
 import {Card, CardBody, CardTitle} from "reactstrap";
 import {useDispatch, useSelector} from "react-redux";
 import {useParams} from "react-router";
@@ -39,31 +39,71 @@ const Album = props => {
     };
 
     const tracks = album.tracks.map(e => (
-        <Card
-            key={e._id}
-            style={{
-                background: '#ccc',
-                width: '25%',
-            }}
-        >
-            <span>{e.increment}</span>
-            <CardBody>
-                <CardTitle className='h2'>{e.name}</CardTitle>
-                <span>duration: {e.duration}s</span>
-                {user.user.token && (
-                    <>
-                        <Button className='d-block mb-2' onClick={async () => {
-                            await addTrackHistory(e, user.user.token);
-                        }}>Listen</Button>
-                        {e.videoId && <Button onClick={async () => {
-                            await setVideoId({...videoId,videoId: e.videoId});
-                            toggle();
-                            await addTrackHistory(e, user.user.token);
-                        }}>Посмотреть на ютуб</Button>}
-                    </>
-                )}
-            </CardBody>
-        </Card>
+        user.user.role === 'admin' ?
+            <Card key={e._id} style={{ background: '#ccc', width: '25%', }} >
+                <span>{e.increment}</span>
+                <CardBody>
+                    <CardTitle className='h2'>{e.name}</CardTitle>
+                    <span>duration: {e.duration}s</span>
+                    {user.user.token && (
+                        <>
+                            <Button className='d-block mb-2' onClick={async () => {
+                                await addTrackHistory(e, user.user.token);
+                            }}>Listen</Button>
+                            {!e.published && <Button className='mb-2' onClick={() => dispatch(publishTrack(user.user.token, e._id, id))}>Published</Button>}
+                            <Button className='mb-2' onClick={() => dispatch(deleteTrack(user.user.token, e._id, id))}>Delete</Button>
+                            {e.videoId && <Button onClick={async () => {
+                                await setVideoId({...videoId,videoId: e.videoId});
+                                toggle();
+                                await addTrackHistory(e, user.user.token);
+                            }}>Посмотреть на ютуб</Button>}
+                        </>
+                    )}
+                </CardBody>
+                <span><b>{e.published ? 'Опубликовано' : 'Неопубликовано'}</b></span>
+            </Card>
+            :
+            e.userAuthor.username === user.user.username ?
+                <Card key={e._id} style={{ background: '#ccc', width: '25%', }} >
+                    <span>{e.increment}</span>
+                    <CardBody>
+                        <CardTitle className='h2'>{e.name}</CardTitle>
+                        <span>duration: {e.duration}s</span>
+                        {user.user.token && (
+                            <>
+                                <Button className='d-block mb-2' onClick={async () => {
+                                    await addTrackHistory(e, user.user.token);
+                                }}>Listen</Button>
+                                {e.videoId && <Button onClick={async () => {
+                                    await setVideoId({...videoId,videoId: e.videoId});
+                                    toggle();
+                                    await addTrackHistory(e, user.user.token);
+                                }}>Посмотреть на ютуб</Button>}
+                            </>
+                        )}
+                    </CardBody>
+                    {e.userAuthor.username === user.user.username && <span>Это ваша публикация    <b>{e.published ? 'Опубликовано' : 'Неопубликовано'}</b></span>}
+                </Card>
+                :
+                <Card key={e._id} style={{background: '#ccc', width: '25%', display: e.published ? 'inline-block' : 'none' }} >
+                    <span>{e.increment}</span>
+                    <CardBody>
+                        <CardTitle className='h2'>{e.name}</CardTitle>
+                        <span>duration: {e.duration}s</span>
+                        {user.user.token && (
+                            <>
+                                <Button className='d-block mb-2' onClick={async () => {
+                                    await addTrackHistory(e, user.user.token);
+                                }}>Listen</Button>
+                                {e.videoId && <Button onClick={async () => {
+                                    await setVideoId({...videoId, videoId: e.videoId});
+                                    toggle();
+                                    await addTrackHistory(e, user.user.token);
+                                }}>Посмотреть на ютуб</Button>}
+                                </>
+                        )}
+                    </CardBody>
+                </Card>
     ));
 
     return (

@@ -16,7 +16,36 @@ const rootReducer = combineReducers({
     login: login,
 });
 
-const store = createStore(rootReducer, applyMiddleware(thunk));
+const saveUserInfo = state => {
+    try {
+        const save = JSON.stringify(state);
+        localStorage.setItem('state', save);
+    } catch (e) {
+        console.log('Dont save')
+    }
+};
+
+const loadUserInfo = () => {
+    try {
+        const load = localStorage.getItem('state');
+        if(load === null) return undefined;
+
+        return JSON.parse(load);
+    } catch (e) {
+        return undefined
+    }
+};
+
+const store = createStore(rootReducer, loadUserInfo(), applyMiddleware(thunk));
+
+store.subscribe(() => {
+    saveUserInfo({
+        login: {
+            user: store.getState().login.user
+        }
+    })
+});
+
 
 const app = (
     <BrowserRouter>

@@ -1,4 +1,4 @@
-import {GET_TRACK_HISTORY, LOG_OUT, LOGIN_USER_ERROR, REGISTER_USER_ERROR, REGISTER_USER_RES} from "../actions/user";
+import {GET_TRACK_HISTORY, LOGOUT_USER, LOGIN_USER_ERROR, REGISTER_USER_ERROR, REGISTER_USER_RES} from "../actions/user";
 
 const initialState = {
   user: {},
@@ -19,7 +19,7 @@ const user = (state = initialState, action) => {
     return {...state, errorLog: action.error};
   }
 
-  if(action.type === LOG_OUT){
+  if(action.type === LOGOUT_USER){
     return initialState;
   }
 

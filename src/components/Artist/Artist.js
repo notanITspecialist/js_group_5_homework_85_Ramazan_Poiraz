@@ -1,8 +1,8 @@
 import React, {useEffect} from 'react';
-import {Button, Card, CardBody, CardImg, CardTitle} from "reactstrap";
 import {useDispatch, useSelector} from "react-redux";
-import {getArtist} from "../../actions/artist";
+import {deleteAlbum, getArtist, publishAlbum} from "../../actions/artist";
 import {useParams} from "react-router";
+import ListItem from "../ListItem/ListItem";
 
 
 const Artist = props => {
@@ -11,6 +11,7 @@ const Artist = props => {
 
     const info = useSelector(state => state.artists.artist.info);
     const albums = useSelector(state => state.artists.artist.albums);
+    const user = useSelector(state => state.login);
 
     useEffect(() => {
         dispatch(getArtist(id));
@@ -29,17 +30,19 @@ const Artist = props => {
                     <hr/>
                     <h3>Albums</h3>
                     {albums.map(e => (
-                        <Card key={e._id} className="w-25 d-inline-block m-1" style={{background: '#ccc'}} >
-                            <div className='p-2'>
-                                {e.poster ? <CardImg top width="100%" src={"http://localhost:8000/uploads/albums/" + e.poster} alt="Card image cap" /> : <p className='p-0 m-0'>Poster not found</p>}
-                            </div>
-                            <CardBody>
-                                <CardTitle className='h2'>{e.name}</CardTitle>
-                                <p>released in {e.release}</p>
-                                <p>number of tracks: {e.allTracks ? e.allTracks : 0}</p>
-                                <Button onClick={() => getAlbumInfo(e._id)}>More info</Button>
-                            </CardBody>
-                        </Card>
+                        <ListItem
+                            key={e._id}
+                            getArtistInfo={() => getAlbumInfo(e._id)}
+                            userAuthor={e.userAuthor._id}
+                            username={user.user._id}
+                            name={e.name}
+                            role={user.user.role}
+                            published={e.published}
+                            typeImage={'albums'}
+                            photo={e.poster}
+                            publish={() => dispatch(publishAlbum(user.user.token, e._id, id))}
+                            delete={() => dispatch(deleteAlbum(user.user.token, e._id, id))}
+                        />
                     ))}
                 </div>
                 :

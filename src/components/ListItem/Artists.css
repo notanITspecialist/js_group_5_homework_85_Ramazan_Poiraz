@@ -1,0 +1,15 @@
+.item-img {
+    width: 150px;
+    max-height: 100px;
+    margin-right: 20px;
+}
+
+.item-buttons {
+    margin-left: auto;
+}
+
+.item-published {
+    position: absolute;
+    left: 190px;
+    top: 45px;
+}

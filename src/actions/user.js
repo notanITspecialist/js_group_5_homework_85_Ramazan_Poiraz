@@ -7,7 +7,7 @@ export const LOGIN_USER_ERROR = 'LOGIN_USER_ERROR';
 
 export const GET_TRACK_HISTORY = 'GET_TRACK_HISTORY';
 
-export const LOG_OUT = 'LOG_OUT';
+export const LOGOUT_USER = 'LOGOUT_USER';
 
 
 
@@ -17,7 +17,7 @@ export const loginUserError = error => ({type: LOGIN_USER_ERROR, error});
 
 export const getTrackHistory = data => ({type: GET_TRACK_HISTORY, data});
 
-export const logOut = () => ({type: LOG_OUT});
+export const logoutUserSuc = () => ({type: LOGOUT_USER});
 
 
 
@@ -45,6 +45,13 @@ export const loginUser = (register, history) => async dispatch => {
 
 export const initTrackHistory = token => async dispatch => {
     const data = await axios.get('http://localhost:8000/track_history', {headers: {'Authorization': `Token ${token}`}});
-    console.log(token);
     dispatch(getTrackHistory(data.data));
+};
+
+export const logoutUser = () => async (dispatch, getState) => {
+    const token = getState().login.user.token;
+    const header = {'Authorization': "Token "+token};
+
+    await axios.delete('http://localhost:8000/user/sessions', {headers: header});
+    dispatch(logoutUserSuc())
 };

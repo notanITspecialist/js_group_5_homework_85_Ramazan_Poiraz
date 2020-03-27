@@ -1,43 +1,46 @@
 import React, {useEffect} from 'react';
 
 import {
-    Card, CardImg, CardBody,
-    CardTitle, Button
+    ListGroup
 } from 'reactstrap';
 import {useDispatch, useSelector} from "react-redux";
-import {useParams} from "react-router";
-import {getArtists} from "../../actions/artists";
+import {deleteArtist, getArtists, publishArtist} from "../../actions/artists";
+import ListItem from "../ListItem/ListItem";
 
 const Artists = props => {
     const dispatch = useDispatch();
-    const {id} = useParams();
 
     const artistsState = useSelector(state => state.artists.artists);
+    const user = useSelector(state => state.login);
 
     useEffect(() => {
-        dispatch(getArtists(id))
-    },[dispatch, id]);
+        dispatch(getArtists())
+    },[dispatch]);
 
     const getArtistInfo = id => {
       props.history.push('/artist/' + id);
     };
 
     const artists = artistsState.map(e => (
-        <Card key={e._id} className="w-25 d-inline-block m-1" style={{background: '#ccc'}} >
-            <div className='p-2'>
-                {e.photo ? <CardImg top width="100%" className='float-right' src={"http://localhost:8000/uploads/artists/" + e.photo} alt="Card image cap" /> : <p className='p-0 m-0'>Photo not found</p>}
-            </div>
-            <CardBody>
-                <CardTitle className='h2'>{e.name}</CardTitle>
-                <Button onClick={() => getArtistInfo(e._id)}>More info</Button>
-            </CardBody>
-        </Card>
+        <ListItem
+            key={e._id}
+            getArtistInfo={() => getArtistInfo(e._id)}
+            userAuthor={e.userAuthor._id}
+            username={user.user._id}
+            name={e.name}
+            role={user.user.role}
+            published={e.published}
+            typeImage={'artists'}
+            photo={e.photo}
+            publish={() => dispatch(publishArtist(user.user.token, e._id)) }
+            delete={() => dispatch(deleteArtist(user.user.token, e._id)) }
+        />
     ));
 
     return (
-        <div>
+        <ListGroup className='d-flex flex-wrap'>
             {artists[0] ? artists : <h1>Artists not found</h1>}
-        </div>
+        </ListGroup>
     );
 };
 export default Artists;

@@ -14,7 +14,7 @@ const TrackHistory = () => {
         dispatch(initTrackHistory(userToken))
     }, [dispatch, userToken]);
 
-    const hostory = user.trackHistory.map(e => (
+    const hostory = user.trackHistory && user.trackHistory.map(e => (
         <ListGroupItem key={e._id}>
             <h5 className='d-inline mr-5'>author: {e.author.name}</h5>
             <h5 className='d-inline'>track: {e.track.name}</h5>
