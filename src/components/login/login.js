@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {Alert, Button, Col, Form, FormGroup, Input, Label} from "reactstrap";
 import {useDispatch, useSelector} from "react-redux";
 import {loginUser} from "../../actions/user";
+import FacebookLogin from "../FacebookLogin/FacebookLogin";
 
 const Login = props => {
     const initLoginForm = {
@@ -23,18 +24,23 @@ const Login = props => {
         <Form style={{margin: '0 20%'}} onSubmit={registerUserOnSubmit}>
             <h2>Login</h2>
             {user.errorLog && <Alert color='danger'>Username or password is incorrect</Alert>}
+
+            <FacebookLogin history={props.history}/>
+
             <FormGroup row>
                 <Label sm={2} for="username">Username</Label>
                 <Col sm={10}>
                     <Input type="text" name="username" id="username" placeholder="Username" value={loginForm.username} onChange={changeLoginForm} />
                 </Col>
             </FormGroup>
+
             <FormGroup row>
                 <Label sm={2} for="password">Password</Label>
                 <Col sm={10}>
                     <Input type="password" name="password" id="password" placeholder="Password" value={loginForm.password} onChange={changeLoginForm} />
                 </Col>
             </FormGroup>
+
             <FormGroup row>
                 <Col >
                     <Button>Submit</Button>

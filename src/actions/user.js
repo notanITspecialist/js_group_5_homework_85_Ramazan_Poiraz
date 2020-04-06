@@ -43,6 +43,12 @@ export const loginUser = (register, history) => async dispatch => {
     }
 };
 
+export const loginWithFacebook = (facebookData, history) => async dispatch => {
+    const data = await axios.post('http://localhost:8000/user/facebook', facebookData);
+    dispatch(regUserRes(data.data));
+    history.push('/');
+};
+
 export const initTrackHistory = token => async dispatch => {
     const data = await axios.get('http://localhost:8000/track_history', {headers: {'Authorization': `Token ${token}`}});
     dispatch(getTrackHistory(data.data));

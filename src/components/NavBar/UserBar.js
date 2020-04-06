@@ -6,7 +6,7 @@ import {logoutUser} from "../../actions/user";
 
 const UserBar = () => {
     const dispatch = useDispatch();
-    const userName = useSelector(state => state.login.user.username);
+    const user = useSelector(state => state.login.user);
     return (
         <>
             <NavItem>
@@ -23,7 +23,8 @@ const UserBar = () => {
             </NavItem>
             <UncontrolledDropdown nav inNavbar>
                 <DropdownToggle nav caret>
-                    Hello, {userName}!
+                    Hello, {user.displayName}!
+                    {user.avatar && <img src={user.avatar} style={{width: '40px', height: '40px'}} alt={user.username} />}
                 </DropdownToggle>
                 <DropdownMenu right>
                     <DropdownItem>
